@@ -12,11 +12,15 @@ const hostname = process.env.HOST_NAME || "localhost";
 // Config template engine
 viewEngineConfig(app);
 
-// Routes
-webRoutes(app);
+//config req.body
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 //Config static file
 app.use(express.static("public"));
+
+// Routes
+webRoutes(app);
 
 // Start server
 app.listen(port, () => {

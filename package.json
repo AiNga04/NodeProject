@@ -11,8 +11,9 @@
     "start": "nodemon",
     "dev": "nodemon",
     "production": "tsc && nodemon dist/index.js",
-    "style": "sass --watch src/assets/style/scss/style.scss src/assets/style/css/style.css",
-    "user.create": "sass --watch src/assets/style/scss/user.create.scss src/assets/style/css/user.create.css"
+    "style": "sass --watch src/public/scss/style.scss src/public/css/style.css",
+    "user.create": "sass --watch src/public/scss/user.create.scss src/public/css/user.create.css",
+    "start:debug": "nodemon --inspect=9229 -e ts,tsx --exec node -r ts-node/register ./src/app.ts"
   },
   "nodemonConfig": {
     "watch": [
