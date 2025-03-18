@@ -1,0 +1,43 @@
+{
+  "name": "nodeproject",
+  "version": "1.0.0",
+  "description": "Zyna code node",
+  "license": "ISC",
+  "author": "Zyna",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon",
+    "dev": "nodemon",
+    "production": "tsc && nodemon dist/index.js",
+    "style": "sass --watch src/assets/style/scss/style.scss src/assets/style/css/style.css",
+    "user.create": "sass --watch src/assets/style/scss/user.create.scss src/assets/style/css/user.create.css"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "exec": "ts-node ./src/index.ts",
+    "ext": "ts",
+    "ignore": [
+      "node_modules"
+    ],
+    "delay": 2500
+  },
+  "devDependencies": {
+    "@types/ejs": "3.1.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "nodemon": "^3.1.9",
+    "sass": "^1.86.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "mysql2": "^3.13.0"
+  }
+}

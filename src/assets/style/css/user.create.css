@@ -1,0 +1,10 @@
+.create-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.create-user-container h1 {
+  color: red;
+}
+
+/*# sourceMappingURL=user.create.css.map */

@@ -1,0 +1,10 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-container h1 {
+  color: red;
+}
+
+/*# sourceMappingURL=style.css.map */
