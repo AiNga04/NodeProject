@@ -13,13 +13,13 @@
     "production": "tsc && nodemon dist/index.js",
     "style": "sass --watch src/public/scss/style.scss src/public/css/style.css",
     "user.create": "sass --watch src/public/scss/user.create.scss src/public/css/user.create.css",
-    "start:debug": "nodemon --inspect=9229 -e ts,tsx --exec node -r ts-node/register ./src/app.ts"
+    "start:debug": "nodemon --inspect=9229 -e ts,tsx --exec node -r ts-node/register -r tsconfig-paths/register ./src/index.ts"
   },
   "nodemonConfig": {
     "watch": [
       "src"
     ],
-    "exec": "ts-node ./src/index.ts",
+    "exec": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "ext": "ts",
     "ignore": [
       "node_modules"
@@ -39,6 +39,7 @@
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "mysql2": "^3.13.0"
+    "mysql2": "^3.13.0",
+    "tsconfig-paths": "^4.2.0"
   }
 }

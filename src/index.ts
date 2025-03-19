@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import viewEngineConfig from "./configs/view.engine.config";
 import webRoutes from "./routes/web";
+import getConnection from "./configs/database.config";
 
 dotenv.config();
 
@@ -13,14 +14,16 @@ const hostname = process.env.HOST_NAME || "localhost";
 viewEngineConfig(app);
 
 //config req.body
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //Config static file
 app.use(express.static("public"));
 
 // Routes
 webRoutes(app);
+
+getConnection();
 
 // Start server
 app.listen(port, () => {

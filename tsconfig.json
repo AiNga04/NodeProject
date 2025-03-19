@@ -6,6 +6,19 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "app/*": ["./src/app/*"],
+      "configs/*": ["./src/configs/*"],
+      "controllers/*": ["./src/controllers/*"],
+      "middlewares/*": ["./src/middlewares/*"],
+      "migration/*": ["./src/migration/*"],
+      "models/*": ["./src/models/*"],
+      "public/*": ["./src/public/*"],
+      "seeders/*": ["./src/seeders/*"],
+      "services/*": ["./src/services/*"],
+      "views/*": ["./src/views/*"]
+    }
   }
 }

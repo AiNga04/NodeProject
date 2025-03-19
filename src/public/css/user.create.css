@@ -13,6 +13,9 @@
   flex-direction: column;
   gap: 10px;
 }
+.create-user-container .submit {
+  width: 100%;
+}
 .create-user-container h1 {
   color: red;
 }

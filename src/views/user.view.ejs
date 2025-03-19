@@ -14,25 +14,24 @@
     <div class="create-user-container container">
 
         <div class="form-container">
-            <h1 class="text-center text-primary">Welcome Create User</h1>
-            <form action="/user/create" method="post">
+            <h1 class="text-center text-primary">Welcome View User</h1>
+            <form action="/user/list" method="get">
                 <div class="mb-3">
                     <label for="inputEmail" class="form-label">Email address</label>
-                    <input name="email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+                    <input disabled value="<%=user.email%>" name="email" type="email" class="form-control"
+                        id="inputEmail" aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
                     <label for="inputUsername" class="form-label">Username</label>
-                    <input name="username" type="text" class="form-control" id="inputUsername">
+                    <input disabled value="<%=user.username%>" name="username" type="text" class="form-control"
+                        id="inputUsername">
                 </div>
                 <div class="mb-3">
                     <label for="inputPassword" class="form-label">Password</label>
-                    <input name="password" type="password" class="form-control" id="inputPassword">
+                    <input disabled value="<%=user.password%>" name="password" type="password" class="form-control"
+                        id="inputPassword">
                 </div>
-                <!-- <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="check">
-                    <label class="form-check-label" for="check">Check me out</label>
-                </div> -->
-                <button type="submit" class="btn btn-primary submit">Create User</button>
+                <button type="submit" class="btn btn-primary submit">List User</button>
             </form>
         </div>
     </div>
