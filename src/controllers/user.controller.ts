@@ -14,7 +14,7 @@ const getCreateUserPage = (req: Request, res: Response) => {
 const postCreateUserPage = (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   handleCreateUser(username, email, password);
-  res.redirect("/");
+  res.redirect("/user/list");
 };
 
 const getListUserPage = async (req: Request, res: Response) => {
