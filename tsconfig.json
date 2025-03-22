@@ -18,7 +18,8 @@
       "public/*": ["./src/public/*"],
       "seeders/*": ["./src/seeders/*"],
       "services/*": ["./src/services/*"],
-      "views/*": ["./src/views/*"]
+      "views/*": ["./src/views/*"],
+      "routes/*": ["./src/routes/*"]
     }
   }
 }

@@ -13,37 +13,61 @@ const getCreateUserPage = (req: Request, res: Response) => {
 
 const postCreateUserPage = (req: Request, res: Response) => {
   const { username, email, password } = req.body;
-  handleCreateUser(username, email, password);
-  res.redirect("/user/list");
+  try {
+    handleCreateUser(username, email, password);
+    res.redirect("/user/list");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const getListUserPage = async (req: Request, res: Response) => {
-  const users = await getAllUser();
-  res.render("user.list.ejs", { users: users });
+  try {
+    const users = await getAllUser();
+    res.render("user.list.ejs", { users: users });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const postdeleteUserPage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  await deleteUserByID(id);
-  res.redirect("/user/list");
+  try {
+    await deleteUserByID(id);
+    res.redirect("/user/list");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const getViewUserPage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await getUserByID(id);
-  res.render("user.view.ejs", { user: user });
+  try {
+    const user = await getUserByID(id);
+    res.render("user.view.ejs", { user: user });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const getUpdateUserPage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await getUserByID(id);
-  res.render("user.update.ejs", { user: user });
+  try {
+    const user = await getUserByID(id);
+    res.render("user.update.ejs", { user: user });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const postUpdateUserPage = async (req: Request, res: Response) => {
   const { id, username, email, password } = req.body;
-  await postUpdateUserByID(id, username, email, password);
-  res.redirect("/user/list");
+  try {
+    await postUpdateUserByID(id, username, email, password);
+    res.redirect("/user/list");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export {

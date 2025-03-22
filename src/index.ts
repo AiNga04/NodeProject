@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
-import viewEngineConfig from "./configs/view.engine.config";
-import webRoutes from "./routes/web";
-import getConnection from "./configs/database.config";
+import viewEngineConfig from "configs/view.engine.config";
+import webRoutes from "routes/web";
+import connection from "configs/database.config";
 
 dotenv.config();
 
@@ -23,9 +23,14 @@ app.use(express.static("public"));
 // Routes
 webRoutes(app);
 
-getConnection();
-
-// Start server
-app.listen(port, () => {
-  console.log(`Server running at http://${hostname}:${port}`);
-});
+(async () => {
+  try {
+    await connection();
+    // Start server
+    app.listen(port, () => {
+      console.log(`Server running at http://${hostname}:${port}`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
+})();

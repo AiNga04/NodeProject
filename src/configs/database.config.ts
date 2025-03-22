@@ -1,27 +1,21 @@
 // Get the client
-import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 dotenv.config();
 
-const getConnection = async () => {
-  // Create the connection to database
-  const connection = await mysql.createPool({
-    host: process.env.HOST_NAME || "localhost",
-    user: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "",
-    port: +process.env.DB_PORT || 3307,
-    database: process.env.BD_NAME || "",
-    waitForConnections: true,
-    connectionLimit: 10,
-    maxIdle: 10,
-    idleTimeout: 60000,
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
-  });
+const connection = async () => {
+  const options = {
+    user: process.env.DB_USERNAME,
+    pass: process.env.DB_PASSWORD,
+    dbName: process.env.BD_NAME,
+  };
 
-  return connection;
+  try {
+    await mongoose.connect(process.env.DATABASE_URL, options);
+  } catch (error) {
+    console.error("Database connection error:", error);
+  }
 };
 
-export default getConnection;
+export default connection;
