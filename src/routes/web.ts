@@ -1,6 +1,6 @@
 import express, { Router, Express } from "express";
 import { getHomePage } from "../controllers/home.controller";
-import { getLoginPage } from "../controllers/login.controller";
+import { getLoginPage, getRegisterPage } from "../controllers/auth.controller";
 import {
   getCreateUserPage,
   postCreateUserPage,
@@ -16,8 +16,14 @@ const router: Router = express.Router();
 
 const webRoutes = (app: Express) => {
   // Định nghĩa các route
+  // Home route
   router.get("/", getHomePage);
+
+  // Auth routes
   router.get("/auth/login", getLoginPage);
+  router.get("/auth/register", getRegisterPage);
+
+  // User routes
   router.get("/user/create", getCreateUserPage);
   router.get("/user/list", getListUserPage);
   router.post("/user/create", postCreateUserPage);

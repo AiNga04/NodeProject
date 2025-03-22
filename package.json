@@ -13,6 +13,8 @@
     "production": "tsc && nodemon dist/index.js",
     "style": "sass --watch src/public/scss/style.scss src/public/css/style.css",
     "user.create": "sass --watch src/public/scss/user.create.scss src/public/css/user.create.css",
+    "auth.login": "sass --watch src/public/scss/auth.login.scss src/public/css/auth.login.css",
+    "auth.register": "sass --watch src/public/scss/auth.register.scss src/public/css/auth.register.css",
     "start:debug": "nodemon --inspect=9229 -e ts,tsx --exec node -r ts-node/register -r tsconfig-paths/register ./src/index.ts"
   },
   "nodemonConfig": {
@@ -38,10 +40,14 @@
   },
   "dependencies": {
     "@prisma/client": "6.5.0",
+    "bootstrap": "^5.3.3",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "mysql2": "^3.13.0",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
     "tsconfig-paths": "^4.2.0"
   }
 }

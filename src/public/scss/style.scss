@@ -1,20 +1,15 @@
 .home-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  .home-header {
+    a {
+      text-decoration: none;
+      color: black;
+    }
 
-  .home-content {
-    flex-basis: 50%;
-    padding: 20px;
-    background-color: lightgray;
-    text-align: center;
-    margin: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    .btn-primary {
+      color: white;
+    }
   }
 
-  h1 {
-    color: red;
+  .home-content {
   }
 }
