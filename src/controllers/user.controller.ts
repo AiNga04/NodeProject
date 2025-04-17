@@ -11,10 +11,17 @@ const getCreateUserPage = (req: Request, res: Response) => {
   res.render("user.create.ejs");
 };
 
-const postCreateUserPage = (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+const postCreateUserPage = async (req: Request, res: Response) => {
+  const { username, email, password, address, image, description } = req.body;
   try {
-    handleCreateUser(username, email, password);
+    await handleCreateUser(
+      username,
+      email,
+      password,
+      address,
+      image,
+      description
+    );
     res.redirect("/user/list");
   } catch (error) {
     console.error(error);
@@ -24,7 +31,7 @@ const postCreateUserPage = (req: Request, res: Response) => {
 const getListUserPage = async (req: Request, res: Response) => {
   try {
     const users = await getAllUser();
-    res.render("user.list.ejs", { users: users });
+    res.render("user.list.ejs", { users });
   } catch (error) {
     console.error(error);
   }
@@ -44,7 +51,7 @@ const getViewUserPage = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const user = await getUserByID(id);
-    res.render("user.view.ejs", { user: user });
+    res.render("user.view.ejs", { user });
   } catch (error) {
     console.error(error);
   }
@@ -54,16 +61,25 @@ const getUpdateUserPage = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const user = await getUserByID(id);
-    res.render("user.update.ejs", { user: user });
+    res.render("user.update.ejs", { user });
   } catch (error) {
     console.error(error);
   }
 };
 
 const postUpdateUserPage = async (req: Request, res: Response) => {
-  const { id, username, email, password } = req.body;
+  const { id, username, email, password, address, image, description } =
+    req.body;
   try {
-    await postUpdateUserByID(id, username, email, password);
+    await postUpdateUserByID(
+      id,
+      username,
+      email,
+      password,
+      address,
+      image,
+      description
+    );
     res.redirect("/user/list");
   } catch (error) {
     console.error(error);

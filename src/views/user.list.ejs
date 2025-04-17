@@ -20,15 +20,16 @@
                     <th scope="col">ID</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Password</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-
                 <% users.forEach(function(user) { %>
                     <tr>
-                        <td scope="row">
+                        <td>
                             <%= user.id %>
                         </td>
                         <td>
@@ -38,7 +39,13 @@
                             <%= user.email %>
                         </td>
                         <td>
-                            <%= user.password %>
+                            <%= user.address %>
+                        </td>
+                        <td>
+                            <%= user.image %>
+                        </td>
+                        <td>
+                            <%= user.description %>
                         </td>
                         <td class="d-flex">
                             <a href="view/<%=user.id%>" class="btn btn-warning me-2">View</a>

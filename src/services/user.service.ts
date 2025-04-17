@@ -3,9 +3,12 @@ import User from "models/user.model";
 const handleCreateUser = async (
   username: string,
   email: string,
-  password: string
+  password: string,
+  address: string,
+  image: string,
+  description: string
 ) => {
-  User.create({ username, email, password });
+  await User.create({ username, email, password, address, image, description });
 };
 
 const getAllUser = async () => {
@@ -21,15 +24,14 @@ const postUpdateUserByID = async (
   id: string,
   username: string,
   email: string,
-  password: string
+  password: string,
+  address: string,
+  image: string,
+  description: string
 ) => {
   const updateUser = await User.updateOne(
     { _id: id },
-    {
-      username: username,
-      email: email,
-      password: password,
-    }
+    { username, email, password, address, image, description }
   );
 
   return updateUser;

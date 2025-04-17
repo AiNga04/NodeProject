@@ -31,6 +31,21 @@
                     <input disabled value="<%=user.password%>" name="password" type="password" class="form-control"
                         id="inputPassword">
                 </div>
+                <div class="mb-3">
+                    <label for="inputAddress" class="form-label">Address</label>
+                    <input disabled value="<%=user.address%>" name="address" type="text" class="form-control"
+                        id="inputAddress">
+                </div>
+                <div class="mb-3">
+                    <label for="inputImage" class="form-label">Image URL</label>
+                    <input disabled value="<%=user.image%>" name="image" type="text" class="form-control"
+                        id="inputImage">
+                </div>
+                <div class="mb-3">
+                    <label for="inputDescription" class="form-label">Description</label>
+                    <textarea disabled name="description" class="form-control"
+                        id="inputDescription"><%=user.description%></textarea>
+                </div>
                 <button type="submit" class="btn btn-primary submit">List User</button>
             </form>
         </div>

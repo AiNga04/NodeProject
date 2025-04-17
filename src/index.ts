@@ -3,12 +3,20 @@ import express from "express";
 import viewEngineConfig from "configs/view.engine.config";
 import webRoutes from "routes/web";
 import connection from "configs/database.config";
+import fileUpload from "express-fileupload";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
+
+//config file upload
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
 
 // Config template engine
 viewEngineConfig(app);

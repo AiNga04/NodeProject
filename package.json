@@ -29,11 +29,11 @@
     "delay": 2500
   },
   "devDependencies": {
-    "@types/ejs": "3.1.5",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.13.10",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.11",
     "nodemon": "^3.1.9",
-    "prisma": "6.5.0",
+    "prisma": "^6.5.0",
     "sass": "^1.86.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
@@ -44,6 +44,7 @@
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
     "mongoose": "^8.12.2",
     "mysql2": "^3.13.0",
     "react": "^19.0.0",

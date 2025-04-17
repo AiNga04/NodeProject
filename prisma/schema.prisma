@@ -18,5 +18,8 @@ model User {
   username    String?   @db.VarChar(255)
   email       String?   @db.VarChar(255)
   password    String?   @db.VarChar(255)
+  address     String?   @db.VarChar(255)
+  image       String?   @db.VarChar(255)
+  description String?   @db.Text
 }
 
