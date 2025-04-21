@@ -1,6 +1,7 @@
-import User from "models/user.model";
+import User from "../models/user.model";
+import bcrypt from "bcrypt";
 
-const handleCreateUser = async (
+const createUser = async (
   username: string,
   email: string,
   password: string,
@@ -8,19 +9,36 @@ const handleCreateUser = async (
   image: string,
   description: string
 ) => {
-  await User.create({ username, email, password, address, image, description });
+  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+
+  if (existingUser) {
+    throw new Error("User already exists");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newUser = await User.create({
+    username,
+    email,
+    password: hashedPassword,
+    address,
+    image,
+    description,
+  });
+
+  return newUser;
 };
 
-const getAllUser = async () => {
-  const users = await User.find({}).exec();
-  return users;
+const getAllUsers = async () => {
+  return await User.find({}).exec();
 };
 
-const deleteUserByID = async (id: string) => {
-  await User.deleteOne({ _id: id });
+const getUserById = async (id: string) => {
+  return await User.findById(id).exec();
 };
 
-const postUpdateUserByID = async (
+const updateUserById = async (
   id: string,
   username: string,
   email: string,
@@ -29,23 +47,15 @@ const postUpdateUserByID = async (
   image: string,
   description: string
 ) => {
-  const updateUser = await User.updateOne(
-    { _id: id },
-    { username, email, password, address, image, description }
-  );
-
-  return updateUser;
+  return await User.findByIdAndUpdate(
+    id,
+    { username, email, password, address, image, description },
+    { new: true }
+  ).exec();
 };
 
-const getUserByID = async (id: string) => {
-  const user = await User.findById(id).exec();
-  return user;
+const deleteUserById = async (id: string) => {
+  return await User.findByIdAndDelete(id).exec();
 };
 
-export {
-  handleCreateUser,
-  getAllUser,
-  deleteUserByID,
-  postUpdateUserByID,
-  getUserByID,
-};
+export { createUser, getAllUsers, getUserById, updateUserById, deleteUserById };

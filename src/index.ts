@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
-import viewEngineConfig from "configs/view.engine.config";
-import webRoutes from "routes/web";
 import connection from "configs/database.config";
 import fileUpload from "express-fileupload";
+import apiRoutes from "./routes/api";
 
 dotenv.config();
 
@@ -11,25 +10,25 @@ const app = express();
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
 
-//config file upload
-app.use(
-  fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
-  })
-);
-
-// Config template engine
-viewEngineConfig(app);
-
-//config req.body
+// Config req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Config file upload
+app.use(
+  fileUpload({
+    limits: { fileSize: 500 * 1024 * 1024 }, // Giới hạn kích thước file
+    useTempFiles: true, // Sử dụng file tạm
+    tempFileDir: "/tmp/", // Thư mục lưu file tạm
+    createParentPath: true, // Tự động tạo thư mục nếu chưa tồn tại
+  })
+);
 
 //Config static file
 app.use(express.static("public"));
 
 // Routes
-webRoutes(app);
+apiRoutes(app);
 
 (async () => {
   try {

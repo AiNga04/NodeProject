@@ -1,20 +1,52 @@
 import { Request, Response } from "express";
 import {
-  getAllUser,
-  handleCreateUser,
-  deleteUserByID,
-  getUserByID,
-  postUpdateUserByID,
-} from "services/user.service";
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+} from "../services/user.service";
 
-const getCreateUserPage = (req: Request, res: Response) => {
-  res.render("user.create.ejs");
+// Get all users
+const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await getAllUsers();
+    res.status(200).json({
+      success: true,
+      message: "Users retrieved successfully!",
+      data: users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error!" });
+  }
 };
 
-const postCreateUserPage = async (req: Request, res: Response) => {
-  const { username, email, password, address, image, description } = req.body;
+// Get user by ID
+const getUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
   try {
-    await handleCreateUser(
+    const user = await getUserById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User retrieved successfully!",
+      data: user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error!" });
+  }
+};
+
+// Create a new user
+const createUserHandler = async (req: Request, res: Response) => {
+  const { username, email, password, address, image, description } = req.body;
+
+  try {
+    const newUser = await createUser(
       username,
       email,
       password,
@@ -22,56 +54,34 @@ const postCreateUserPage = async (req: Request, res: Response) => {
       image,
       description
     );
-    res.redirect("/user/list");
-  } catch (error) {
-    console.error(error);
+
+    res.status(201).json({
+      success: true,
+      message: "User created successfully!",
+      data: newUser,
+    });
+  } catch (error: any) {
+    if (error.message === "User already exists!") {
+      res.status(409).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error!",
+      });
+    }
   }
 };
 
-const getListUserPage = async (req: Request, res: Response) => {
-  try {
-    const users = await getAllUser();
-    res.render("user.list.ejs", { users });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const postdeleteUserPage = async (req: Request, res: Response) => {
+// Update user by ID
+const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { username, email, password, address, image, description } = req.body;
   try {
-    await deleteUserByID(id);
-    res.redirect("/user/list");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getViewUserPage = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await getUserByID(id);
-    res.render("user.view.ejs", { user });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getUpdateUserPage = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await getUserByID(id);
-    res.render("user.update.ejs", { user });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const postUpdateUserPage = async (req: Request, res: Response) => {
-  const { id, username, email, password, address, image, description } =
-    req.body;
-  try {
-    await postUpdateUserByID(
+    const updatedUser = await updateUserById(
       id,
       username,
       email,
@@ -80,18 +90,38 @@ const postUpdateUserPage = async (req: Request, res: Response) => {
       image,
       description
     );
-    res.redirect("/user/list");
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: updatedUser });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };
 
-export {
-  getCreateUserPage,
-  postCreateUserPage,
-  getListUserPage,
-  postdeleteUserPage,
-  getViewUserPage,
-  getUpdateUserPage,
-  postUpdateUserPage,
+// Delete user by ID
+const deleteUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await deleteUserById(id);
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "User deleted successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error!" });
+  }
 };
+
+export { getUsers, getUser, createUserHandler, updateUser, deleteUser };
