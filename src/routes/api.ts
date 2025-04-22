@@ -5,6 +5,7 @@ import {
   createUserHandler,
   updateUser,
   deleteUser,
+  uploadImageUser, createListUsersHandle, softDeleteUser,
 } from "../controllers/user.controller";
 import { postRegister, postLogin } from "../controllers/auth.controller";
 import {uploadImage, uploadImages} from "../controllers/upload.controller";
@@ -25,6 +26,12 @@ const apiRoutes = (app: Express) => {
   router.put("/users/:id", updateUser);
   // @ts-ignore
   router.delete("/users/:id", deleteUser);
+  // @ts-ignore
+  router.delete("/users/soft-delete/:id", softDeleteUser);
+  // @ts-ignore
+  router.put("/users/upload/:id", uploadImageUser);
+  // @ts-ignore
+  router.post("/users/list", createListUsersHandle);
 
   //Upload
   // @ts-ignore

@@ -1,5 +1,6 @@
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 const createUser = async (
   username: string,
@@ -58,4 +59,51 @@ const deleteUserById = async (id: string) => {
   return await User.findByIdAndDelete(id).exec();
 };
 
-export { createUser, getAllUsers, getUserById, updateUserById, deleteUserById };
+// Function to soft delete a user by ID
+const softDeleteUserById = async (id: string) => {
+    try {
+        // Validate the ID format (MongoDB ObjectId)
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new Error('Invalid user ID');
+        }
+
+        // @ts-ignore
+        const user = await User.deleteById(id);
+
+        // const user = await User.findByIdAndUpdate(
+        //     id,
+        //     { deletedAt: new Date() },
+        //     { new: true }
+        // );
+
+        return user;
+    } catch (err) {
+        console.error('Error in softDeleteUserById:', err);
+        throw err;
+    }
+};
+
+const uploadImageById = async (id: string, image: string) => {
+  return await User.findByIdAndUpdate(id, { image }, { new: true }).exec();
+};
+
+const createListUsers = async (listUsers) => {
+  try {
+    const result = await User.insertMany(listUsers, { rawResult: true });
+    return result;
+  } catch (err) {
+    console.error("Error in createListUsers:", err);
+    return null;
+  }
+};
+
+export {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+  uploadImageById,
+  createListUsers,
+  softDeleteUserById,
+};
