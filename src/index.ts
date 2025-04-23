@@ -12,16 +12,18 @@ const hostname = process.env.HOST_NAME || "localhost";
 
 // Config req.body
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 
 // Config file upload
 app.use(
-  fileUpload({
-    limits: { fileSize: 500 * 1024 * 1024 }, // Giới hạn kích thước file
-    useTempFiles: true, // Sử dụng file tạm
-    tempFileDir: "/tmp/", // Thư mục lưu file tạm
-    createParentPath: true, // Tự động tạo thư mục nếu chưa tồn tại
-  })
+    fileUpload({
+        limits: {fileSize: 500 * 1024 * 1024}, // Giới hạn kích thước file
+        useTempFiles: true, // Sử dụng file tạm
+        tempFileDir: "/tmp/", // Thư mục lưu file tạm
+        createParentPath: true, // Tự động tạo thư mục nếu chưa tồn tại
+    })
 );
 
 //Config static file
@@ -31,13 +33,13 @@ app.use(express.static("public"));
 apiRoutes(app);
 
 (async () => {
-  try {
-    await connection();
-    // Start server
-    app.listen(port, () => {
-      console.log(`Server running at http://${hostname}:${port}`);
-    });
-  } catch (error) {
-    console.error("Error starting server:", error);
-  }
+    try {
+        await connection();
+        // Start server
+        app.listen(port, () => {
+            console.log(`Server running at http://${hostname}:${port}`);
+        });
+    } catch (error) {
+        console.error("Error starting server:", error);
+    }
 })();

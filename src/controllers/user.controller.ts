@@ -8,17 +8,25 @@ import {
   uploadImageById,
   createListUsers,
   softDeleteUserById,
+  softDeleteListId,
 } from "../services/user.service";
 import { uploadSingleFile } from "services/upload.service";
 
 // Get all users
 const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await getAllUsers();
+    //@ts-ignore
+    const { users, totalRecords, limit, page } = await getAllUsers(req.query);
+
     res.status(200).json({
       success: true,
       message: "Users retrieved successfully!",
-      data: users,
+      data: {
+        page,
+        limit,
+        totalRecords,
+        users,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -248,6 +256,45 @@ const createListUsersHandle = async (req: Request, res: Response) => {
   }
 };
 
+const softDeleteListUser = async (req: Request, res: Response) => {
+  const { listIds } = req.body;
+
+  // Kiểm tra dữ liệu đầu vào
+  if (!listIds || !Array.isArray(listIds) || listIds.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid input: listIds must be a non-empty array",
+    });
+  }
+
+  try {
+    // Gọi service để thực hiện soft delete
+    const result = await softDeleteListId(listIds);
+
+    if (!result || result.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No users found to soft delete",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Soft delete list processed successfully",
+      data: {
+        deletedCount: result.deletedCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error in softDeleteListUser:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 export {
   getUsers,
   getUser,
@@ -257,4 +304,5 @@ export {
   createListUsersHandle,
   uploadImageUser,
   softDeleteUser,
+  softDeleteListUser,
 };

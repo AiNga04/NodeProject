@@ -1,6 +1,7 @@
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import aqp from 'api-query-params';
 
 const createUser = async (
   username: string,
@@ -31,8 +32,26 @@ const createUser = async (
   return newUser;
 };
 
-const getAllUsers = async () => {
-  return await User.find({}).exec();
+const getAllUsers = async (queruString: object) => {
+  const totalRecords = await User.countDocuments();
+  // @ts-ignore
+  const limit = parseInt(queruString.limit as string) || 0;
+  // @ts-ignore
+  const page = parseInt(queruString.page as string) || 0;
+
+  if (limit && page) {
+    const offset = (page - 1) * limit
+
+    // @ts-ignore
+    const { filter } = aqp(queruString);
+    delete filter.page;
+
+    const users = await User.find(filter).skip(offset).limit(limit).exec();
+    return { users, totalRecords, limit, page };
+  } else {
+    const users = await User.find({}).exec();
+    return { users, totalRecords };
+  }
 };
 
 const getUserById = async (id: string) => {
@@ -61,26 +80,20 @@ const deleteUserById = async (id: string) => {
 
 // Function to soft delete a user by ID
 const softDeleteUserById = async (id: string) => {
-    try {
-        // Validate the ID format (MongoDB ObjectId)
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error('Invalid user ID');
-        }
-
-        // @ts-ignore
-        const user = await User.deleteById(id);
-
-        // const user = await User.findByIdAndUpdate(
-        //     id,
-        //     { deletedAt: new Date() },
-        //     { new: true }
-        // );
-
-        return user;
-    } catch (err) {
-        console.error('Error in softDeleteUserById:', err);
-        throw err;
+  try {
+    // Validate the ID format (MongoDB ObjectId)
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid user ID");
     }
+
+    // @ts-ignore
+    const user = await User.deleteById(id);
+
+    return user;
+  } catch (err) {
+    console.error("Error in softDeleteUserById:", err);
+    throw err;
+  }
 };
 
 const uploadImageById = async (id: string, image: string) => {
@@ -97,6 +110,23 @@ const createListUsers = async (listUsers) => {
   }
 };
 
+const softDeleteListId = async (listIds: string[]) => {
+  try {
+    // Kiểm tra xem danh sách ID có hợp lệ không
+    if (!listIds || !Array.isArray(listIds) || listIds.length === 0) {
+      throw new Error("Invalid input: listIds must be a non-empty array");
+    }
+
+    // Thực hiện soft delete
+    const result = await User.deleteMany({ _id: { $in: listIds } });
+
+    return result;
+  } catch (err) {
+    console.error("Error in softDeleteListId:", err);
+    throw err;
+  }
+};
+
 export {
   createUser,
   getAllUsers,
@@ -106,4 +136,5 @@ export {
   uploadImageById,
   createListUsers,
   softDeleteUserById,
+  softDeleteListId,
 };

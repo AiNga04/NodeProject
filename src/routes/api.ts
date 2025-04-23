@@ -5,10 +5,13 @@ import {
   createUserHandler,
   updateUser,
   deleteUser,
-  uploadImageUser, createListUsersHandle, softDeleteUser,
+  uploadImageUser,
+  createListUsersHandle,
+  softDeleteUser,
+  softDeleteListUser,
 } from "../controllers/user.controller";
 import { postRegister, postLogin } from "../controllers/auth.controller";
-import {uploadImage, uploadImages} from "../controllers/upload.controller";
+import { uploadImage, uploadImages } from "../controllers/upload.controller";
 
 const router: Router = express.Router();
 
@@ -29,9 +32,13 @@ const apiRoutes = (app: Express) => {
   // @ts-ignore
   router.delete("/users/soft-delete/:id", softDeleteUser);
   // @ts-ignore
+  router.post("/users/soft-delete-list", softDeleteListUser);
+  // @ts-ignore
   router.put("/users/upload/:id", uploadImageUser);
   // @ts-ignore
   router.post("/users/list", createListUsersHandle);
+  // @ts-ignore
+  router.post("/users/soft-delete-list", softDeleteListUser);
 
   //Upload
   // @ts-ignore
