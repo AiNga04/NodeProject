@@ -3,12 +3,15 @@ import express from "express";
 import connection from "configs/database.config";
 import fileUpload from "express-fileupload";
 import apiRoutes from "./routes/api";
+import { MongoClient } from 'mongodb'
+import * as process from "node:process";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
+const uri = process.env.HOST_NAME_WITH_MONGODB_DRIVER
 
 // Config req.body
 app.use(express.json());
@@ -34,7 +37,22 @@ apiRoutes(app);
 
 (async () => {
     try {
+        // connection with mongoose
         await connection();
+
+        // // connection with mongodb driver
+        // const client = new MongoClient(process.env.HOST_NAME_WITH_MONGODB_DRIVER);
+        // try {
+        //     await client.connect();
+        //     const db = client.db(process.env.BD_NAME);
+        //     await db.collection("customers").insertOne({ name: "Ái Nga", address: "Việt Nam" });
+        //     console.log("Inserted document");
+        // } catch (err) {
+        //     console.error("MongoDB error:", err);
+        // } finally {
+        //     await client.close();
+        // }
+
         // Start server
         app.listen(port, () => {
             console.log(`Server running at http://${hostname}:${port}`);

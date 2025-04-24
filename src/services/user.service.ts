@@ -32,18 +32,18 @@ const createUser = async (
   return newUser;
 };
 
-const getAllUsers = async (queruString: object) => {
+const getAllUsers = async (queryString: object) => {
   const totalRecords = await User.countDocuments();
   // @ts-ignore
-  const limit = parseInt(queruString.limit as string) || 0;
+  const limit = parseInt(queryString.limit as string) || 0;
   // @ts-ignore
-  const page = parseInt(queruString.page as string) || 0;
+  const page = parseInt(queryString.page as string) || 0;
 
   if (limit && page) {
     const offset = (page - 1) * limit
 
     // @ts-ignore
-    const { filter } = aqp(queruString);
+    const { filter } = aqp(queryString);
     delete filter.page;
 
     const users = await User.find(filter).skip(offset).limit(limit).exec();

@@ -10,6 +10,14 @@ import {
   softDeleteUser,
   softDeleteListUser,
 } from "../controllers/user.controller";
+import {
+  createEmtyProject,
+  getAllProjects,
+  updateProject,
+  deleteProject,
+  softDeleteProject,
+  softDeleteListProjects,
+} from "../controllers/project.controller";
 import { postRegister, postLogin } from "../controllers/auth.controller";
 import { uploadImage, uploadImages } from "../controllers/upload.controller";
 
@@ -44,6 +52,18 @@ const apiRoutes = (app: Express) => {
   // @ts-ignore
   router.post("/upload/image", uploadImage);
   router.post("/upload/images", uploadImages);
+
+  //Project
+  router.post("/projects", createEmtyProject);
+  router.get("/projects", getAllProjects);
+  // @ts-ignore
+  router.put("/projects/:id", updateProject);
+  // @ts-ignore
+  router.delete("/projects/:id", deleteProject);
+  // @ts-ignore
+  router.delete("/projects/soft-delete/:id", softDeleteProject);
+  // @ts-ignore
+  router.post("/projects/soft-delete-list", softDeleteListProjects);
 
   app.use("/v1/api/", router);
 };
