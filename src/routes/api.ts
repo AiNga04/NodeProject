@@ -20,6 +20,14 @@ import {
 } from "../controllers/project.controller";
 import { postRegister, postLogin } from "../controllers/auth.controller";
 import { uploadImage, uploadImages } from "../controllers/upload.controller";
+import {
+  createTaskHandler,
+  getAllTasksHandler,
+  updateTask,
+  deleteTask,
+  softDeleteTask,
+  softDeleteListTasks,
+} from "../controllers/task.controller";
 
 const router: Router = express.Router();
 
@@ -64,6 +72,18 @@ const apiRoutes = (app: Express) => {
   router.delete("/projects/soft-delete/:id", softDeleteProject);
   // @ts-ignore
   router.post("/projects/soft-delete-list", softDeleteListProjects);
+
+  //Task
+  router.post("/tasks", createTaskHandler);
+  router.get("/tasks", getAllTasksHandler);
+  // @ts-ignore
+  router.put("/tasks/:id", updateTask);
+  // @ts-ignore
+  router.delete("/tasks/:id", deleteTask);
+  // @ts-ignore
+  router.delete("/tasks/soft-delete/:id", softDeleteTask);
+  // @ts-ignore
+  router.post("/tasks/soft-delete-list", softDeleteListTasks);
 
   app.use("/v1/api/", router);
 };

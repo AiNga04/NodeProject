@@ -1,5 +1,6 @@
 import Project from "../models/project.model";
 import User from "../models/user.model";
+import Task from "../models/task.model";
 import aqp from "api-query-params";
 import api from "routes/api";
 
@@ -74,8 +75,8 @@ const handleCreateProject = async (data) => {
     // Check if users exist in project
     const usersToDelete = data.usersInfor.map((id) => id.toString());
     const existingUsers = currentProject.usersInfor
-        .map((id) => id.toString())
-        .filter((id) => usersToDelete.includes(id));
+      .map((id) => id.toString())
+      .filter((id) => usersToDelete.includes(id));
 
     if (existingUsers.length === 0) {
       return {
@@ -86,7 +87,7 @@ const handleCreateProject = async (data) => {
 
     // Remove users from project
     currentProject.usersInfor = currentProject.usersInfor.filter(
-        (userId) => !usersToDelete.includes(userId.toString())
+      (userId) => !usersToDelete.includes(userId.toString())
     );
 
     const updatedProject = await currentProject.save();
@@ -96,6 +97,99 @@ const handleCreateProject = async (data) => {
       data: updatedProject,
     };
   }
+
+  if (data.type === "ADD-TASKS") {
+    // Check if project exists
+    let currentProject = await Project.findById(data.projectId).exec();
+    if (!currentProject) {
+      return {
+        success: false,
+        message: "Project not found!",
+      };
+    }
+
+    // Check if tasks exist
+    if (data.task.length > 0) {
+      // Check if all taskIds exist in tasks collection
+      const tasksExist = await Task.find({
+        _id: { $in: data.task },
+      }).select("_id");
+      const existingTaskIds = tasksExist.map((task) => task._id.toString());
+
+      // Check for invalid tasks
+      const invalidTasks = data.task.filter(
+        (taskId) => !existingTaskIds.includes(taskId.toString())
+      );
+      if (invalidTasks.length > 0) {
+        return {
+          success: false,
+          message: `Tasks with IDs ${invalidTasks.join(", ")} do not exist!`,
+        };
+      }
+    }
+
+    // Check for duplicate tasks
+    const duplicateTasks = data.task.filter((taskId) =>
+      currentProject.tasks
+        .map((id) => id.toString())
+        .includes(taskId.toString())
+    );
+
+    if (duplicateTasks.length > 0) {
+      return {
+        success: false,
+        message: `Tasks with IDs ${duplicateTasks.join(
+          ", "
+        )} are already in the project!`,
+      };
+    }
+
+    // Add new tasks to project
+    currentProject.tasks.push(...data.task);
+    const updatedProject = await currentProject.save();
+    return {
+      success: true,
+      message: "Tasks added successfully!",
+      data: updatedProject,
+    };
+  }
+
+  if (data.type === "DELETE-TASKS") {
+    // Check if project exists
+    let currentProject = await Project.findById(data.projectId).exec();
+    if (!currentProject) {
+      return {
+        success: false,
+        message: "Project not found!",
+      };
+    }
+
+    // Check if tasks exist in project
+    const tasksToDelete = data.task.map((id) => id.toString());
+    const existingTasks = currentProject.tasks
+      .map((id) => id.toString())
+      .filter((id) => tasksToDelete.includes(id));
+
+    if (existingTasks.length === 0) {
+      return {
+        success: false,
+        message: "None of the specified tasks exist in the project!",
+      };
+    }
+
+    // Remove tasks from project
+    currentProject.tasks = currentProject.tasks.filter(
+      (taskId) => !tasksToDelete.includes(taskId.toString())
+    );
+
+    const updatedProject = await currentProject.save();
+    return {
+      success: true,
+      message: "Tasks removed from project successfully!",
+      data: updatedProject,
+    };
+  }
+
   return null;
 };
 
