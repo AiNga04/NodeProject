@@ -1,0 +1,64 @@
+<!-- filepath: d:\Nga\BE\node\repository\NodeProject\src\views\home.ejs -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Coder Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-height: 60vh;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #de270e;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 20px;
+        }
+
+        a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Coder Info</h1>
+        <p>Name: <%= coder.name %>
+        </p>
+        <p>Email: <%= coder.email %>
+        </p>
+        <p>Skills: <%= coder.skills.join(', ') %></p>
+        <p>Github: <a href="<%= coder.github %>"><%= coder.github %></a></p>
+    </div>
+</body>
+</html>
