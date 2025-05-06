@@ -100,7 +100,17 @@ const uploadImageById = async (id: string, image: string) => {
 
 const createListUsers = async (listUsers) => {
   try {
-    const result = await User.insertMany(listUsers, { rawResult: true });
+    // Hash password for each user in the list
+    const hashedUsers = await Promise.all(
+      listUsers.map(async (user) => {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(user.password, salt);
+        return { ...user, password: hashedPassword };
+      })
+    );
+
+    // Insert users with hashed passwords into the database
+    const result = await User.insertMany(hashedUsers, { rawResult: true });
     return result;
   } catch (err) {
     console.error("Error in createListUsers:", err);
