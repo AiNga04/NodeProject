@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
-const uri = process.env.HOST_NAME_WITH_MONGODB_DRIVER;
+// const uri = process.env.HOST_NAME_WITH_MONGODB_DRIVER;
 
 // Config req.body
 app.use(express.json());

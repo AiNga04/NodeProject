@@ -1,14 +1,13 @@
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import aqp from 'api-query-params';
+import aqp from "api-query-params";
 
 const createUser = async (
   username: string,
   email: string,
   password: string,
   address: string,
-  image: string,
   description: string
 ) => {
   const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -25,7 +24,6 @@ const createUser = async (
     email,
     password: hashedPassword,
     address,
-    image,
     description,
   });
 
@@ -40,7 +38,7 @@ const getAllUsers = async (queryString: object) => {
   const page = parseInt(queryString.page as string) || 0;
 
   if (limit && page) {
-    const offset = (page - 1) * limit
+    const offset = (page - 1) * limit;
 
     // @ts-ignore
     const { filter } = aqp(queryString);

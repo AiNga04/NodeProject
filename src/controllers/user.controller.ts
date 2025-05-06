@@ -59,23 +59,12 @@ const getUser = async (req: Request, res: Response) => {
 const createUserHandler = async (req, res) => {
   const { username, email, password, address, description } = req.body;
 
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).json({
-      success: false,
-      message: "No files were uploaded!",
-    });
-  }
-
-  const result = uploadSingleFile(req.files.image);
-  const image = result.data.path;
-
   try {
     const newUser = await createUser(
       username,
       email,
       password,
       address,
-      image,
       description
     );
 
