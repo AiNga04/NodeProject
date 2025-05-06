@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   phone: String,
   email: String,
 });
+
 const projectSchema = new mongoose.Schema({
   name: String,
   startDate: Date,

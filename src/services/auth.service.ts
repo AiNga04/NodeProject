@@ -5,10 +5,18 @@ const handleRegister = async (
   username: string,
   email: string,
   password: string,
+  firstName: string,
+  lastName: string,
+  phone: number,
+  gender: string,
   address: string,
-  description: string
+  description: string,
+  roleId: string,
+  positionId: string
 ) => {
-  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  const existingUser = await User.findOne({
+    $or: [{ email }, { username }, { phone }],
+  });
 
   if (existingUser) {
     throw new Error("User already exists!");
@@ -21,35 +29,44 @@ const handleRegister = async (
     username,
     email,
     password: hashedPassword,
+    firstName,
+    lastName,
+    phone,
+    gender,
     address,
     description,
+    roleId,
+    positionId,
   });
 
   return newUser;
 };
 
 const handleLogin = async (username: string, password: string) => {
-  // Tìm người dùng theo username
   const user = await User.findOne({ username });
 
   if (!user) {
     throw new Error("User not found!");
   }
 
-  // So sánh mật khẩu
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     throw new Error("Invalid password!");
   }
 
-  // Trả về thông tin người dùng nếu đăng nhập thành công
   return {
     id: user._id,
     username: user.username,
     email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    phone: user.phone,
+    gender: user.gender,
     address: user.address,
     description: user.description,
+    roleId: user.roleId,
+    positionId: user.positionId,
   };
 };
 

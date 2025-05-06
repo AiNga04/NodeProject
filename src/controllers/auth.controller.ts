@@ -3,15 +3,33 @@ import { handleRegister, handleLogin } from "../services/auth.service";
 
 // Create a new user
 const postRegister = async (req: Request, res: Response) => {
-  const { username, email, password, address, description } = req.body;
+  const {
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+    phone,
+    gender,
+    address,
+    description,
+    roleId,
+    positionId,
+  } = req.body;
 
   try {
     const newUser = await handleRegister(
       username,
       email,
       password,
+      firstName,
+      lastName,
+      phone,
+      gender,
       address,
-      description
+      description,
+      roleId,
+      positionId
     );
 
     res.status(201).json({
@@ -35,11 +53,11 @@ const postRegister = async (req: Request, res: Response) => {
   }
 };
 
+// Login user
 const postLogin = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
-    // Gọi service để xử lý đăng nhập
     const user = await handleLogin(username, password);
 
     res.status(200).json({

@@ -1,17 +1,24 @@
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import aqp from 'api-query-params';
+import aqp from "api-query-params";
 
 const createUser = async (
   username: string,
   email: string,
   password: string,
+  firstName: string,
+  lastName: string,
+  phone: number,
+  gender: string,
   address: string,
-  image: string,
-  description: string
+  description: string,
+  roleId: string,
+  positionId: string
 ) => {
-  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  const existingUser = await User.findOne({
+    $or: [{ email }, { username }, { phone }],
+  });
 
   if (existingUser) {
     throw new Error("User already exists");
@@ -24,9 +31,14 @@ const createUser = async (
     username,
     email,
     password: hashedPassword,
+    firstName,
+    lastName,
+    phone,
+    gender,
     address,
-    image,
     description,
+    roleId,
+    positionId,
   });
 
   return newUser;
@@ -40,7 +52,7 @@ const getAllUsers = async (queryString: object) => {
   const page = parseInt(queryString.page as string) || 0;
 
   if (limit && page) {
-    const offset = (page - 1) * limit
+    const offset = (page - 1) * limit;
 
     // @ts-ignore
     const { filter } = aqp(queryString);
@@ -63,13 +75,36 @@ const updateUserById = async (
   username: string,
   email: string,
   password: string,
+  firstName: string,
+  lastName: string,
+  phone: number,
+  gender: string,
   address: string,
-  image: string,
-  description: string
+  description: string,
+  roleId: string,
+  positionId: string
 ) => {
+  let hashedPassword = password;
+  if (password) {
+    const salt = await bcrypt.genSalt(10);
+    hashedPassword = await bcrypt.hash(password, salt);
+  }
+
   return await User.findByIdAndUpdate(
     id,
-    { username, email, password, address, image, description },
+    {
+      username,
+      email,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      phone,
+      gender,
+      address,
+      description,
+      roleId,
+      positionId,
+    },
     { new: true }
   ).exec();
 };
@@ -100,8 +135,27 @@ const uploadImageById = async (id: string, image: string) => {
   return await User.findByIdAndUpdate(id, { image }, { new: true }).exec();
 };
 
-const createListUsers = async (listUsers) => {
+const createListUsers = async (listUsers: any[]) => {
   try {
+    // Validate each user in the list
+    for (const user of listUsers) {
+      const { username, email, password, phone } = user;
+      const existingUser = await User.findOne({
+        $or: [{ email }, { username }, { phone }],
+      });
+      if (existingUser) {
+        throw new Error(
+          `User with email ${email} or username ${username} or phone ${phone} already exists`
+        );
+      }
+
+      // Hash password for each user
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+      }
+    }
+
     const result = await User.insertMany(listUsers, { rawResult: true });
     return result;
   } catch (err) {

@@ -57,26 +57,33 @@ const getUser = async (req: Request, res: Response) => {
 
 // Create a new user
 const createUserHandler = async (req, res) => {
-  const { username, email, password, address, description } = req.body;
-
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).json({
-      success: false,
-      message: "No files were uploaded!",
-    });
-  }
-
-  const result = uploadSingleFile(req.files.image);
-  const image = result.data.path;
+  const {
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+    phone,
+    gender,
+    address,
+    description,
+    roleId,
+    positionId,
+  } = req.body;
 
   try {
     const newUser = await createUser(
       username,
       email,
       password,
+      firstName,
+      lastName,
+      phone,
+      gender,
       address,
-      image,
-      description
+      description,
+      roleId,
+      positionId
     );
 
     res.status(201).json({
@@ -103,16 +110,34 @@ const createUserHandler = async (req, res) => {
 // Update user by ID
 const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { username, email, password, address, image, description } = req.body;
+  const {
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+    phone,
+    gender,
+    address,
+    description,
+    roleId,
+    positionId,
+  } = req.body;
+
   try {
     const updatedUser = await updateUserById(
       id,
       username,
       email,
       password,
+      firstName,
+      lastName,
+      phone,
+      gender,
       address,
-      image,
-      description
+      description,
+      roleId,
+      positionId
     );
     if (!updatedUser) {
       return res
@@ -231,6 +256,32 @@ const createListUsersHandle = async (req: Request, res: Response) => {
     });
   }
 
+  // Validate required fields for each user
+  for (const user of listUsers) {
+    const requiredFields = [
+      "username",
+      "email",
+      "password",
+      "firstName",
+      "lastName",
+      "phone",
+      "gender",
+      "address",
+      "description",
+      "roleId",
+      "positionId",
+    ];
+    for (const field of requiredFields) {
+      if (!user[field]) {
+        return res.status(400).json({
+          success: false,
+          message: `Missing required field: ${field}`,
+          data: null,
+        });
+      }
+    }
+  }
+
   try {
     const result = await createListUsers(listUsers);
     if (result) {
@@ -246,11 +297,11 @@ const createListUsersHandle = async (req: Request, res: Response) => {
         data: null,
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating users:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: error.message || "Internal server error",
       data: null,
     });
   }

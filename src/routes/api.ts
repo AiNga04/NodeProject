@@ -85,7 +85,7 @@ const apiRoutes = (app: Express) => {
   // @ts-ignore
   router.post("/tasks/soft-delete-list", softDeleteListTasks);
 
-  app.use("/v1/api/", router);
+  app.use("/v2/api/", router);
 };
 
 export default apiRoutes;
