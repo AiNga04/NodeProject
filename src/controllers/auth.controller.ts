@@ -3,13 +3,14 @@ import { handleRegister, handleLogin } from "../services/auth.service";
 
 // Create a new user
 const postRegister = async (req: Request, res: Response) => {
-  const { username, email, password, address, description } = req.body;
+  const { username, email, password, role, address, description } = req.body;
 
   try {
     const newUser = await handleRegister(
       username,
       email,
       password,
+      role,
       address,
       description
     );

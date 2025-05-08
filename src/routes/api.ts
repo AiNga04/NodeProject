@@ -28,10 +28,13 @@ import {
   softDeleteTask,
   softDeleteListTasks,
 } from "../controllers/task.controller";
+import auth from "middlewares/auth";
 
 const router: Router = express.Router();
 
 const apiRoutes = (app: Express) => {
+  router.all("*", auth);
+
   //Auth
   router.post("/auth/register", postRegister);
   router.post("/auth/login", postLogin);

@@ -1,10 +1,14 @@
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const handleRegister = async (
   username: string,
   email: string,
   password: string,
+  role: string,
   address: string,
   description: string
 ) => {
@@ -21,6 +25,7 @@ const handleRegister = async (
     username,
     email,
     password: hashedPassword,
+    role,
     address,
     description,
   });
@@ -41,16 +46,32 @@ const handleLogin = async (username: string, password: string) => {
 
   if (!isPasswordValid) {
     throw new Error("Invalid password!");
-  }
+  } else {
+    const payload = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
 
-  // Trả về thông tin người dùng nếu đăng nhập thành công
-  return {
-    id: user._id,
-    username: user.username,
-    email: user.email,
-    address: user.address,
-    description: user.description,
-  };
+    const access_token = jwt.sign(
+      payload,
+      process.env.JWT_SECRET_KEY as string,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
+
+    return {
+      access_token,
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      address: user.address,
+      role: user.role,
+      description: user.description,
+    };
+  }
 };
 
 export { handleRegister, handleLogin };

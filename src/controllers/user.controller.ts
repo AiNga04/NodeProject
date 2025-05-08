@@ -57,13 +57,14 @@ const getUser = async (req: Request, res: Response) => {
 
 // Create a new user
 const createUserHandler = async (req, res) => {
-  const { username, email, password, address, description } = req.body;
+  const { username, email, password, role, address, description } = req.body;
 
   try {
     const newUser = await createUser(
       username,
       email,
       password,
+      role,
       address,
       description
     );

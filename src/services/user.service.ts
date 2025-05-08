@@ -7,6 +7,7 @@ const createUser = async (
   username: string,
   email: string,
   password: string,
+  role: string,
   address: string,
   description: string
 ) => {
@@ -23,6 +24,7 @@ const createUser = async (
     username,
     email,
     password: hashedPassword,
+    role,
     address,
     description,
   });

@@ -5,6 +5,7 @@ import fileUpload from "express-fileupload";
 import apiRoutes from "./routes/api";
 import webRoutes from "./routes/web";
 import * as process from "node:process";
+import cors from "cors";
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ const app = express();
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
 // const uri = process.env.HOST_NAME_WITH_MONGODB_DRIVER;
+
+// Config cors
+app.use(cors());
 
 // Config req.body
 app.use(express.json());
