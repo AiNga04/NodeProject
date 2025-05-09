@@ -29,6 +29,7 @@ import {
   softDeleteListTasks,
 } from "../controllers/task.controller";
 import auth from "middlewares/auth";
+import { getAccount } from "../controllers/user.controller";
 
 const router: Router = express.Router();
 
@@ -87,6 +88,9 @@ const apiRoutes = (app: Express) => {
   router.delete("/tasks/soft-delete/:id", softDeleteTask);
   // @ts-ignore
   router.post("/tasks/soft-delete-list", softDeleteListTasks);
+
+  //account
+  router.get("/account", getAccount);
 
   app.use("/v1/api/", router);
 };

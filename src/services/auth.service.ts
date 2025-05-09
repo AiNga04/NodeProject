@@ -52,6 +52,9 @@ const handleLogin = async (username: string, password: string) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      image: user.image,
+      address: user.address,
+      description: user.description,
     };
 
     const access_token = jwt.sign(
@@ -69,6 +72,7 @@ const handleLogin = async (username: string, password: string) => {
       email: user.email,
       address: user.address,
       role: user.role,
+      image: user.image,
       description: user.description,
     };
   }

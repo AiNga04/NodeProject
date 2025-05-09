@@ -285,6 +285,22 @@ const softDeleteListUser = async (req: Request, res: Response) => {
   }
 };
 
+const getAccount = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const decoded = req.user;
+  if (!decoded) {
+    return res.status(401).json({
+      success: false,
+      message: "401 Unauthorized",
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Get account successfully!",
+    data: decoded,
+  });
+};
+
 export {
   getUsers,
   getUser,
@@ -295,4 +311,5 @@ export {
   uploadImageUser,
   softDeleteUser,
   softDeleteListUser,
+  getAccount,
 };
